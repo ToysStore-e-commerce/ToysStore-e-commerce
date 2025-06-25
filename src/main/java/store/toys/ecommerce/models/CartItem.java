@@ -24,6 +24,6 @@ public class CartItem {
 
     // Optional relationship (to access product details if needed)
     @ManyToOne
-    @JoinColumn(name = "product_ref_id")
+    @JoinColumn(name = "product_id")
     private Product product;
 }
