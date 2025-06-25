@@ -5,8 +5,13 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.*;
 
 @Entity
+@Table(name = "carts")
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@Builder
 public class Cart {
 
     @Id

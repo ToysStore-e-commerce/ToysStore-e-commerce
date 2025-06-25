@@ -3,9 +3,15 @@ package store.toys.ecommerce.models;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import lombok.*;
 
 @Entity
 @Table(name = "users")
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@Builder
 public class User {
 
     @Id

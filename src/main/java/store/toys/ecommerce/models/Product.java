@@ -4,8 +4,14 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
+import lombok.*;
 
 @Entity
+@Table(name = "products")
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor
+@Builder
 public class Product {
 
     @Id
