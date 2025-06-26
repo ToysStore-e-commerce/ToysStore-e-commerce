@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import store.toys.ecommerce.dtos.category.CategoryDTO;
 import store.toys.ecommerce.dtos.category.CategoryMapper;
-import store.toys.ecommerce.dtos.category.CategoryResponseDTO; // ✅ Add this!
+import store.toys.ecommerce.dtos.category.CategoryResponseDTO;
 import store.toys.ecommerce.models.Category;
 import store.toys.ecommerce.services.CategoryService;
 
