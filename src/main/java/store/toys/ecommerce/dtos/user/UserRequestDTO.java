@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Builder
-public class UserDTO {
+public class UserRequestDTO {
 
     @NotBlank(message = "Username is required")
     @Size(max = 50)
