@@ -18,12 +18,14 @@ public class CartItem {
     private Long id;
 
     private Long productId;
-    private String name;
-    private BigDecimal price;
     private int quantity;
 
     // Optional relationship (to access product details if needed)
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+    @ManyToOne
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
+
 }
