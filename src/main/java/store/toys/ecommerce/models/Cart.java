@@ -21,11 +21,16 @@ public class Cart {
     private BigDecimal totalPrice;
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    // not obligatory nullable = false in @OneToMany relationships
     @JoinColumn(name = "cart_id")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<CartItem> items = new ArrayList<>();
 }
 

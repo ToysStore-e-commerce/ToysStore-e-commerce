@@ -8,11 +8,11 @@ import jakarta.validation.constraints.NotNull;
 @Builder
 public class CartItemDTO {
 
-    @NotNull
+    @NotNull(message = "Product ID is required")
     private Long productId;
 
-    @NotNull
-    @Min(1)
+    @NotNull(message = "Quantity is required")
+    @Min(value = 1, message = "Quantity must be at least 1")
     private int quantity;
 }
 

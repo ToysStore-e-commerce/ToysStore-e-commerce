@@ -31,15 +31,23 @@ public class Product {
     private double rating;
     private int reviewCount;
 
-    // Relationships
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    // to avoid infinite recursion
+    // @ToString.Exclude: prevents the list of reviews from being printed automatically when calling System.out.println(product)
+    // or using @ToString, which could cause an infinite recursion if Review also prints the product.
+    @ToString.Exclude
+    // @EqualsAndHashCode.Exclude: prevents the list of reviews from being included when comparing two Product objects,
+    // which could cause problems if there are circular references or very large lists.
+    @EqualsAndHashCode.Exclude
     private List<Review> reviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private List<CartItem> cartItems = new ArrayList<>();
 
 
