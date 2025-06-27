@@ -26,10 +26,10 @@ public class CategoryService {
     }
 
     public Category updateCategory(Long id, CategoryDTO dto) {
-        Category existing = categoryRepository.findById(id)
+        Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + id));
-        existing.setName(dto.getName());
-        return categoryRepository.save(existing);
+        existingCategory.setName(dto.getName());
+        return categoryRepository.save(existingCategory);
     }
 
     public void deleteCategory(Long id) {
