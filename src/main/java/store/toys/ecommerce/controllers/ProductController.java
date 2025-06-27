@@ -29,14 +29,14 @@ public class ProductController {
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product create(@RequestBody @Valid ProductDTO p){
-        return products.create(p);
+    public Product create(@RequestBody @Valid ProductDTO productDTO){
+        return products.create(productDTO);
     }
 
     @PutMapping("/{id}")
     public Product update(@PathVariable Long id,
-                          @RequestBody @Valid ProductDTO p){
-        return products.update(id, p);
+                          @RequestBody @Valid ProductDTO productDTO){
+        return products.update(id, productDTO);
     }
 
     @DeleteMapping("/{id}")
@@ -44,20 +44,6 @@ public class ProductController {
     public void delete(@PathVariable Long id){
         products.delete(id);
     }
-    @GetMapping("/filter")
-    public List<Product> filter(@RequestParam(required = false) String name,
-                                @RequestParam(required = false) Long categoryId,
-                                @RequestParam(required = false) BigDecimal minPrice,
-                                @RequestParam(required = false) BigDecimal maxPrice) {
 
-        if (name != null)
-            return products.filterByName(name);
-        if (categoryId != null)
-            return products.filterByCategory(categoryId);
-        if (minPrice != null && maxPrice != null)
-            return products.filterByPrice(minPrice, maxPrice);
-
-        return products.findAll();
-    }
 }
 

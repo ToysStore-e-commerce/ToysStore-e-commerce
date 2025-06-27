@@ -10,8 +10,8 @@ import store.toys.ecommerce.models.Product;
 import store.toys.ecommerce.repositories.CategoryRepository;
 import store.toys.ecommerce.repositories.ProductRepository;
 
-import java.math.BigDecimal;
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -19,12 +19,14 @@ public class ProductService {
     private final CategoryRepository categoryRepo;
 
     public List<Product> findAll(){
-        return productRepo.findAll(); }
+        return productRepo.findAll();
+    }
     public Product findById(Long id){
         return productRepo.findById(id)
             .orElseThrow(() ->
                     new ResourceNotFoundException("Product " + id + " not found")); }
-@Transactional
+
+    @Transactional
 public Product create(ProductDTO dto) {
     Category category = categoryRepo.findById(dto.getCategoryId())
             .orElseThrow(() ->
@@ -62,13 +64,4 @@ public Product update(Long id, ProductDTO dto) {
     public void delete(Long id) {
         productRepo.deleteById(id);
     }
-    public List<Product> filterByName(String name){
-        return productRepo.findByNameContainingIgnoreCase(name);
     }
-    public List<Product> filterByCategory(Long categoryId){
-        return productRepo.findByCategoryId(categoryId);
-    }
-    public List<Product> filterByPrice(BigDecimal min, BigDecimal max){
-        return productRepo.findByPriceBetween(min, max);
-    }
-}
