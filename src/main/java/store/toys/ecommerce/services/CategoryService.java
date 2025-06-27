@@ -17,10 +17,6 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     public Category createCategory(CategoryDTO dto) {
-        if (categoryRepository.existsByName(dto.getName())) {
-            throw new IllegalArgumentException("Category with name already exists.");
-        }
-
         Category category = CategoryMapper.toEntity(dto);
         return categoryRepository.save(category);
     }
