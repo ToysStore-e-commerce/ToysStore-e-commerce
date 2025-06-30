@@ -14,6 +14,7 @@ public class ProductMapper {
                 .imageUrl(dto.getImageUrl())
                 .featured(dto.isFeatured())
                 .category(category)
+                // review/rating default values?
                 .build();
     }
     public static ProductDTO toDTO(Product product){

@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import store.toys.ecommerce.dtos.product.ProductDTO;
-import store.toys.ecommerce.exceptions.ResourceNotFoundException;
+import store.toys.ecommerce.dtos.product.ProductMapper;
 import store.toys.ecommerce.models.Category;
 import store.toys.ecommerce.models.Product;
 import store.toys.ecommerce.repositories.CategoryRepository;
@@ -15,53 +15,41 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
-    private final ProductRepository  productRepo;
-    private final CategoryRepository categoryRepo;
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public List<Product> findAll(){
-        return productRepo.findAll();
+    public List<Product> getAllProducts(){
+        return productRepository.findAll();
     }
-    public Product findById(Long id){
-        return productRepo.findById(id)
-            .orElseThrow(() ->
-                    new ResourceNotFoundException("Product " + id + " not found")); }
+    public Product getProductById(Long id){
+        return productRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Product " + id + " not found")); }
 
     @Transactional
-public Product create(ProductDTO dto) {
-    Category category = categoryRepo.findById(dto.getCategoryId())
-            .orElseThrow(() ->
-                    new ResourceNotFoundException("Category " + dto.getCategoryId() + " not found"));
-
-    Product product = Product.builder()
-            .name(dto.getName())
-            .price(dto.getPrice())
-            .imageUrl(dto.getImageUrl())
-            .featured(dto.isFeatured())
-            .category(category)
-            .rating(0.0)
-            .reviewCount(0)
-            .build();
-
-    return productRepo.save(product);
-}
-
-@Transactional
-public Product update(Long id, ProductDTO dto) {
-    Product product = findById(id);
-    Category category = categoryRepo.findById(dto.getCategoryId())
-            .orElseThrow(() ->
-                    new ResourceNotFoundException("Category " + dto.getCategoryId() + " not found"));
-
-    product.setName(dto.getName());
-    product.setPrice(dto.getPrice());
-    product.setImageUrl(dto.getImageUrl());
-    product.setFeatured(dto.isFeatured());
-    product.setCategory(category);
-
-    return productRepo.save(product);
-}
-
-    public void delete(Long id) {
-        productRepo.deleteById(id);
+    public Product createProduct(ProductDTO dto) {
+        Category productsCategory = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category " + dto.getCategoryId() + " not found"));
+        Product newProduct = ProductMapper.toEntity(dto, productsCategory);
+        return productRepository.save(newProduct);
     }
+
+    @Transactional
+    public Product updateProduct(Long id, ProductDTO dto) {
+        Product product = getProductById(id);
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category " + dto.getCategoryId() + " not found"));
+        product.setName(dto.getName());
+        product.setPrice(dto.getPrice());
+        product.setImageUrl(dto.getImageUrl());
+        product.setFeatured(dto.isFeatured());
+        product.setCategory(category);
+        return productRepository.save(product);
     }
+
+    public void deleteProduct(Long id) {
+        if(!productRepository.existsById(id)) {
+            throw new RuntimeException("Product with " + id + " not found");
+        }
+        productRepository.deleteById(id);
+    }
+}

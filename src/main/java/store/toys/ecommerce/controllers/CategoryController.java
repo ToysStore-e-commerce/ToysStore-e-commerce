@@ -6,7 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import store.toys.ecommerce.dtos.category.CategoryDTO;
 import store.toys.ecommerce.dtos.category.CategoryMapper;
+import store.toys.ecommerce.dtos.product.ProductDTO;
+import store.toys.ecommerce.dtos.product.ProductMapper;
 import store.toys.ecommerce.models.Category;
+import store.toys.ecommerce.models.Product;
 import store.toys.ecommerce.services.CategoryService;
 
 import jakarta.validation.Valid;
@@ -30,15 +33,21 @@ public class CategoryController {
         //return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id){
+        Category category = categoryService.getCategoryById(id);
+        return ResponseEntity.ok(CategoryMapper.toDTO(category));
+    }
+
     @PostMapping
-    public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO dto) {
-        Category category = categoryService.createCategory(dto);
+    public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
+        Category category = categoryService.createCategory(categoryDTO);
         return new ResponseEntity<>(CategoryMapper.toDTO(category), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryDTO dto) {
-        Category updatedCategory = categoryService.updateCategory(id, dto);
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryDTO categoryDTO) {
+        Category updatedCategory = categoryService.updateCategory(id, categoryDTO);
         return ResponseEntity.ok(CategoryMapper.toDTO(updatedCategory));
     }
 

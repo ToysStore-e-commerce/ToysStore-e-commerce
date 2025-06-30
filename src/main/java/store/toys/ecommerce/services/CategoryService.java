@@ -25,6 +25,11 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
+    public Category getCategoryById(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + id));
+    }
+
     public Category updateCategory(Long id, CategoryDTO dto) {
         Category existingCategory = categoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + id));
@@ -37,10 +42,5 @@ public class CategoryService {
             throw new EntityNotFoundException("Category not found with id: " + id);
         }
         categoryRepository.deleteById(id);
-    }
-
-    public Category getCategoryById(Long id) {
-        return categoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + id));
     }
 }
