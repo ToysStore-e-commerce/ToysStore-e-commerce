@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 public class ProductDTO {
 
     @NotBlank(message = "Product name is required")
-    @Size(max = 50)
+    @Size(max = 70)
     private String name;
 
     @NotNull(message = "Price is required")
