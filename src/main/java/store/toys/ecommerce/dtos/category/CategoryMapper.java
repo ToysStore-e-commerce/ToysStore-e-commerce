@@ -1,7 +1,10 @@
 package store.toys.ecommerce.dtos.category;
 
+import org.hibernate.annotations.Comment;
+import org.springframework.stereotype.Component;
 import store.toys.ecommerce.models.Category;
 
+@Component
 public class CategoryMapper {
 
     public static Category toEntity(CategoryDTO dto) {
