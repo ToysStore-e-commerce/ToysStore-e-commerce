@@ -26,11 +26,10 @@ public class Cart {
     @EqualsAndHashCode.Exclude
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    // not obligatory nullable = false in @OneToMany relationships
-    @JoinColumn(name = "cart_id")
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
+    @Builder.Default
     private List<CartItem> items = new ArrayList<>();
 }
 
