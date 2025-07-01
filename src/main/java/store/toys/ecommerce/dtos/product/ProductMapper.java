@@ -1,8 +1,10 @@
 package store.toys.ecommerce.dtos.product;
 
+import org.springframework.stereotype.Component;
 import store.toys.ecommerce.models.Category;
 import store.toys.ecommerce.models.Product;
 
+@Component
 public class ProductMapper {
     public static Product toEntity(ProductDTO dto, Category category){
         if (dto == null) {

@@ -1,9 +1,10 @@
 package store.toys.ecommerce.dtos.user;
-
+import org.springframework.stereotype.Component;
 import store.toys.ecommerce.models.User;
 
+@Component
 public class UserMapper {
-    public static User toEntity(UserRequestDTO dto){
+    public User toEntity(UserRequestDTO dto){
         if (dto == null) {
             return null;
         }
@@ -15,7 +16,7 @@ public class UserMapper {
                 .build();
 
     }
-    public static UserResponseDTO toResponse(User user){
+    public UserResponseDTO toResponse(User user){
         if (user == null) {
             return null;
         }
