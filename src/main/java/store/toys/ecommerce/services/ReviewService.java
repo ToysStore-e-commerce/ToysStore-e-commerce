@@ -20,7 +20,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
+    private final UserRepository userRepository; // ✅ Add this safely
 
     public List<Review> getReviewsByProductId(Long productId) {
         return reviewRepository.findByProductId(productId);
@@ -41,7 +41,7 @@ public class ReviewService {
         Review review = ReviewMapper.toEntity(dto, user, product);
         Review savedReview = reviewRepository.save(review);
 
-        // Update product's average rating and review count
+        // Update product rating and review count
         List<Review> productReviews = reviewRepository.findByProductId(product.getId());
         double totalRating = productReviews.stream().mapToDouble(Review::getRating).sum();
         product.setReviewCount(productReviews.size());
