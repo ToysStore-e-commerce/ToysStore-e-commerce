@@ -11,6 +11,7 @@ import store.toys.ecommerce.dtos.product.ProductMapper;
 import store.toys.ecommerce.models.Product;
 import store.toys.ecommerce.services.ProductService;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,8 +27,8 @@ public class ProductController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) Boolean featured,
-            @RequestParam(required = false) Double minPrice,
-            @RequestParam(required = false) Double maxPrice
+            @RequestParam(required = false) BigDecimal minPrice,
+            @RequestParam(required = false) BigDecimal maxPrice
     ) {
         List<Product> filtered = productService.getFilteredProducts(name, categoryId, featured, minPrice, maxPrice);
         List<ProductDTO> dtos = filtered.stream()

@@ -10,10 +10,10 @@ import store.toys.ecommerce.models.Product;
 import store.toys.ecommerce.repositories.CategoryRepository;
 import store.toys.ecommerce.repositories.ProductRepository;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.criteria.Predicate;
-import org.springframework.data.jpa.domain.Specification;
 
 @Service
 @RequiredArgsConstructor
@@ -28,24 +28,24 @@ public class ProductService {
         return productRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Product " + id + " not found")); }
 
-    public List<Product> getFilteredProducts(String name, Long categoryId, Boolean featured, Double minPrice, Double maxPrice) {
-        return productRepository.findAll((root, query, cb) -> {
+    public List<Product> getFilteredProducts(String name, Long categoryId, Boolean featured, BigDecimal minPrice, BigDecimal maxPrice) {
+        return productRepository.findAll((productRoot, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
             if (name != null && !name.isBlank()) {
-                predicates.add(cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%"));
+                predicates.add(cb.like(cb.lower(productRoot.get("name")), "%" + name.toLowerCase() + "%"));
             }
             if (categoryId != null) {
-                predicates.add(cb.equal(root.get("category").get("id"), categoryId));
+                predicates.add(cb.equal(productRoot.get("category").get("id"), categoryId));
             }
             if (featured != null) {
-                predicates.add(cb.equal(root.get("featured"), featured));
+                predicates.add(cb.equal(productRoot.get("featured"), featured));
             }
             if (minPrice != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("price"), minPrice));
+                predicates.add(cb.greaterThanOrEqualTo(productRoot.get("price"), minPrice));
             }
             if (maxPrice != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("price"), maxPrice));
+                predicates.add(cb.lessThanOrEqualTo(productRoot.get("price"), maxPrice));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));
