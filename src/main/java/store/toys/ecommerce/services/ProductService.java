@@ -17,11 +17,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.criteria.Predicate;
-<<<<<<< Updated upstream
-=======
 import org.springframework.data.jpa.domain.Specification;
 import store.toys.ecommerce.util.FileUploadUtil;
->>>>>>> Stashed changes
 
 @Service
 @RequiredArgsConstructor
