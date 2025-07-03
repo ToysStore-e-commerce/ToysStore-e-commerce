@@ -24,11 +24,16 @@ public class ProductMapper {
             return null;
         }
         return ProductDTO.builder()
+                .id(product.getId())
                 .name(product.getName())
                 .price(product.getPrice())
                 .imageUrl(product.getImageUrl())
                 .featured(product.isFeatured())
                 .categoryId(product.getCategory().getId())
+                .categoryName(product.getCategory().getName())
+                .rating(product.getRating())
+                .reviewCount(product.getReviewCount())
                 .build();
+
     }
 }

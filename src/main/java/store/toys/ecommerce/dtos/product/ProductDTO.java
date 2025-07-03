@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor @AllArgsConstructor
 @Builder
 public class ProductDTO {
+    private Long id;
 
     @NotBlank(message = "Product name is required")
     @Size(max = 70)
@@ -25,5 +26,10 @@ public class ProductDTO {
 
     @NotNull(message = "Category ID is required")
     private Long categoryId;
+
+    private String categoryName;
+
+    private double rating;
+    private int reviewCount;
 }
 
