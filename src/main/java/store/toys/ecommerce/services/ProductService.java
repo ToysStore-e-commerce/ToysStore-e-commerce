@@ -2,7 +2,10 @@ package store.toys.ecommerce.services;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import store.toys.ecommerce.dtos.cloudinary.CloudinaryResponseDTO;
 import store.toys.ecommerce.dtos.product.ProductDTO;
 import store.toys.ecommerce.dtos.product.ProductMapper;
 import store.toys.ecommerce.models.Category;
@@ -14,12 +17,19 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.criteria.Predicate;
+<<<<<<< Updated upstream
+=======
+import org.springframework.data.jpa.domain.Specification;
+import store.toys.ecommerce.util.FileUploadUtil;
+>>>>>>> Stashed changes
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     public List<Product> getAllProducts(){
         return productRepository.findAll();
@@ -71,6 +81,18 @@ public class ProductService {
         product.setFeatured(productDTO.isFeatured());
         product.setCategory(category);
         return productRepository.save(product);
+    }
+
+    @Transactional
+    public void uploadImage(final Long id, final MultipartFile file) {
+        final Product product = this.productRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Product not found"));
+        FileUploadUtil.assertAllowed(file, FileUploadUtil.IMAGE_PATTERN);
+        final String fileName = FileUploadUtil.getFileName(file.getOriginalFilename());
+        final CloudinaryResponseDTO responseDTO = this.cloudinaryService.uploadFile(file, fileName);
+        product.setImageUrl(responseDTO.getUrl());
+        product.setCloudinaryImageId(responseDTO.getPublicId());
+        this.productRepository.save(product);
     }
 
     public void deleteProduct(Long id) {

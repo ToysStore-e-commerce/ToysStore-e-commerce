@@ -6,7 +6,6 @@ import store.toys.ecommerce.models.Cart;
 import store.toys.ecommerce.models.User;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CartMapper {
 
@@ -28,7 +27,8 @@ public class CartMapper {
                 .map(CartItemMapper::toDTO)
                 .toList();
         return CartDTO.builder()
-                .userId(cart.getId())
+                .id(cart.getId())
+                .userId(cart.getUser().getId())
                 .totalPrice(cart.getTotalPrice())
                 .items(itemsDTO)
                 .build();

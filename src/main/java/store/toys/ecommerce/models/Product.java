@@ -25,6 +25,7 @@ public class Product {
     private BigDecimal price;
 
     private String imageUrl;
+    private String cloudinaryImageId;
 
     private boolean featured;
 

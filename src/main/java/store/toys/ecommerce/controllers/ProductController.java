@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import store.toys.ecommerce.dtos.category.CategoryMapper;
 import store.toys.ecommerce.dtos.product.ProductDTO;
 import store.toys.ecommerce.dtos.product.ProductMapper;
@@ -47,6 +48,12 @@ public class ProductController {
     public ResponseEntity<ProductDTO> createProduct(@RequestBody @Valid ProductDTO productDTO) {
         Product product = productService.createProduct(productDTO);
         return new ResponseEntity<>(ProductMapper.toDTO(product), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/image/{id}")
+    public ResponseEntity<?> uploadImage(@PathVariable final Long id, @RequestParam final MultipartFile file) {
+        this.productService.uploadImage(id, file);
+        return ResponseEntity.ok("File upload successfully");
     }
 
     @PutMapping("/{id}")
