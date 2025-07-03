@@ -1,5 +1,6 @@
 package store.toys.ecommerce.services;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import store.toys.ecommerce.dtos.user.UserMapper;
@@ -25,9 +26,11 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public UserResponseDTO getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+        user.getReviews().isEmpty();
         return userMapper.toResponse(user);
     }
 
