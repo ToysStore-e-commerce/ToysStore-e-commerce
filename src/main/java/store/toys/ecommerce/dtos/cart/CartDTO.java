@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 public class CartDTO {
 
+    private Long id;
     @NotNull(message = "User ID is required")
     private Long userId;
 
