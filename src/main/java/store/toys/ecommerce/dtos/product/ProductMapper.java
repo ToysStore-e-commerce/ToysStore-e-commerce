@@ -27,7 +27,6 @@ public class ProductMapper {
                 .name(product.getName())
                 .price(product.getPrice())
                 .imageUrl(product.getImageUrl())
-                .cloudinaryImageId(product.getCloudinaryImageId())
                 .featured(product.isFeatured())
                 .categoryId(product.getCategory().getId())
                 .build();

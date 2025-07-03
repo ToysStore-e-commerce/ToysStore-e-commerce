@@ -21,8 +21,6 @@ public class ProductDTO {
     @Pattern(regexp = "^(http|https)://.*$", message = "Must be a valid URL")
     private String imageUrl;
 
-    private String cloudinaryImageId;
-
     private boolean featured;
 
     @NotNull(message = "Category ID is required")

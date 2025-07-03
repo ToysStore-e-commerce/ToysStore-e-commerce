@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import store.toys.ecommerce.dtos.cloudinary.CloudinaryResponseDTO;
+import store.toys.ecommerce.dtos.cloudinary.CloudinaryDTO;
 import store.toys.ecommerce.dtos.product.ProductDTO;
 import store.toys.ecommerce.dtos.product.ProductMapper;
 import store.toys.ecommerce.models.Category;
@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.criteria.Predicate;
-import org.springframework.data.jpa.domain.Specification;
 import store.toys.ecommerce.util.FileUploadUtil;
 
 @Service
@@ -86,7 +85,7 @@ public class ProductService {
                 .orElseThrow(()-> new RuntimeException("Product not found"));
         FileUploadUtil.assertAllowed(file, FileUploadUtil.IMAGE_PATTERN);
         final String fileName = FileUploadUtil.getFileName(file.getOriginalFilename());
-        final CloudinaryResponseDTO responseDTO = this.cloudinaryService.uploadFile(file, fileName);
+        final CloudinaryDTO responseDTO = this.cloudinaryService.uploadFile(file, fileName);
         product.setImageUrl(responseDTO.getUrl());
         product.setCloudinaryImageId(responseDTO.getPublicId());
         this.productRepository.save(product);

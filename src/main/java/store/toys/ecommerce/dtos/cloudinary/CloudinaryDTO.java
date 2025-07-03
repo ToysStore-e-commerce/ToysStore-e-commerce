@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CloudinaryResponseDTO {
+public class CloudinaryDTO {
     private String publicId;
     private String url;
 }
