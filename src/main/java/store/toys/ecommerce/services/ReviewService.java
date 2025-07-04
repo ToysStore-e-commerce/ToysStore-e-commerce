@@ -20,7 +20,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ProductRepository productRepository;
-    private final UserRepository userRepository; // ✅ Add this safely
+    private final UserRepository userRepository;
 
     public List<Review> getReviewsByProductId(Long productId) {
         return reviewRepository.findByProductId(productId);
