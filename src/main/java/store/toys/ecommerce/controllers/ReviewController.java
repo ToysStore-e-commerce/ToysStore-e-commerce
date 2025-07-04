@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import store.toys.ecommerce.dtos.review.ReviewDTO;
+import store.toys.ecommerce.dtos.review.ReviewRequestDTO;
 import store.toys.ecommerce.dtos.review.ReviewMapper;
 import store.toys.ecommerce.models.Review;
 import store.toys.ecommerce.services.ReviewService;
@@ -20,7 +20,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping
-    public ResponseEntity<List<ReviewDTO>> getReviews(
+    public ResponseEntity<List<ReviewRequestDTO>> getReviews(
             @RequestParam(required = false) Long productId,
             @RequestParam(required = false) Long userId
     ) {
@@ -34,7 +34,7 @@ public class ReviewController {
             return ResponseEntity.badRequest().build();
         }
 
-        List<ReviewDTO> result = reviews.stream()
+        List<ReviewRequestDTO> result = reviews.stream()
                 .map(ReviewMapper::toDTO)
                 .collect(Collectors.toList());
 
@@ -42,7 +42,7 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<ReviewDTO> createReview(@RequestBody @Valid ReviewDTO dto) {
+    public ResponseEntity<ReviewRequestDTO> createReview(@RequestBody @Valid ReviewRequestDTO dto) {
         Review saved = reviewService.createReview(dto);
         return ResponseEntity.ok(ReviewMapper.toDTO(saved));
     }
