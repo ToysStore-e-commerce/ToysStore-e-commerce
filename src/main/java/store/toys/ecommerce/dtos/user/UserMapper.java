@@ -1,6 +1,6 @@
 package store.toys.ecommerce.dtos.user;
 import org.springframework.stereotype.Component;
-import store.toys.ecommerce.dtos.review.ReviewInUserDTO;
+import store.toys.ecommerce.dtos.review.ReviewResponseDTO;
 import store.toys.ecommerce.dtos.review.ReviewMapper;
 import store.toys.ecommerce.models.User;
 
@@ -26,10 +26,11 @@ public class UserMapper {
             return null;
         }
 
-        List<ReviewInUserDTO> reviewSummaries = null;
+        // Map the list of Review entities to a list of ReviewSummaryDTOs
+        List<ReviewResponseDTO> reviewSummaries = null;
         if (user.getReviews() != null) {
             reviewSummaries = user.getReviews().stream()
-                    .map(ReviewMapper::toSummaryDTO)
+                    .map(ReviewMapper::toSummaryDTO)  // Use the static method from ReviewMapper
                     .collect(Collectors.toList());
         }
         return UserResponseDTO.builder()

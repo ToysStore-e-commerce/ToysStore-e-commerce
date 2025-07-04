@@ -6,7 +6,7 @@ import store.toys.ecommerce.models.User;
 
 public class ReviewMapper {
 
-    public static Review toEntity(ReviewDTO dto, User user, Product product) {
+    public static Review toEntity(ReviewRequestDTO dto, User user, Product product) {
         if (dto == null) {
             return null;
         }
@@ -18,11 +18,11 @@ public class ReviewMapper {
                 .build();
     }
 
-    public static ReviewDTO toDTO(Review review) {
+    public static ReviewRequestDTO toDTO(Review review) {
         if (review == null) {
             return null;
         }
-        return ReviewDTO.builder()
+        return ReviewRequestDTO.builder()
                 .rating(review.getRating())
                 .body(review.getBody())
                 .productId(review.getProduct().getId())
@@ -30,11 +30,11 @@ public class ReviewMapper {
                 .build();
     }
 
-    public static ReviewInUserDTO toSummaryDTO(Review review) {
+    public static ReviewResponseDTO toSummaryDTO(Review review) {
         if (review == null) {
             return null;
         }
-        return ReviewInUserDTO.builder()
+        return ReviewResponseDTO.builder()
                 .id(review.getId())
                 .rating(review.getRating())
                 .body(review.getBody())

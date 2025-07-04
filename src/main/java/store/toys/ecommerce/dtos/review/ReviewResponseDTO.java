@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ReviewInUserDTO {
+public class ReviewResponseDTO {
     private Long id;
     private double rating;
     private String body;

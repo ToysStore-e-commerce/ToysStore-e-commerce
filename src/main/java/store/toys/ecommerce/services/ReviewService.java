@@ -3,7 +3,7 @@ package store.toys.ecommerce.services;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import store.toys.ecommerce.dtos.review.ReviewDTO;
+import store.toys.ecommerce.dtos.review.ReviewRequestDTO;
 import store.toys.ecommerce.dtos.review.ReviewMapper;
 import store.toys.ecommerce.models.Product;
 import store.toys.ecommerce.models.Review;
@@ -31,7 +31,7 @@ public class ReviewService {
     }
 
     @Transactional
-    public Review createReview(ReviewDTO dto) {
+    public Review createReview(ReviewRequestDTO dto) {
         Product product = productRepository.findById(dto.getProductId())
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 

@@ -1,7 +1,7 @@
 package store.toys.ecommerce.dtos.user;
 
 import lombok.*;
-import store.toys.ecommerce.dtos.review.ReviewInUserDTO;
+import store.toys.ecommerce.dtos.review.ReviewResponseDTO;
 
 import java.util.List;
 
@@ -14,5 +14,5 @@ public class UserResponseDTO {
     private Long id;
     private String username;
     private String email;
-    private List<ReviewInUserDTO> reviews;
+    private List<ReviewResponseDTO> reviews;
 }
