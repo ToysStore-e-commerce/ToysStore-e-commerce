@@ -1,10 +1,12 @@
 package store.toys.ecommerce.services;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import store.toys.ecommerce.dtos.review.ReviewRequestDTO;
 import store.toys.ecommerce.dtos.review.ReviewMapper;
+import store.toys.ecommerce.exceptions.EntityNotFoundException;
+import store.toys.ecommerce.models.Category;
 import store.toys.ecommerce.models.Product;
 import store.toys.ecommerce.models.Review;
 import store.toys.ecommerce.models.User;
@@ -33,15 +35,14 @@ public class ReviewService {
     @Transactional
     public Review createReview(ReviewRequestDTO dto) {
         Product product = productRepository.findById(dto.getProductId())
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new EntityNotFoundException(Product.class.getSimpleName(), dto.getProductId()));
 
         User user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new EntityNotFoundException(User.class.getSimpleName(), dto.getUserId()));
 
         Review review = ReviewMapper.toEntity(dto, user, product);
         Review savedReview = reviewRepository.save(review);
-
-        // Update product rating and review count
+        
         List<Review> productReviews = reviewRepository.findByProductId(product.getId());
         double totalRating = productReviews.stream().mapToDouble(Review::getRating).sum();
         product.setReviewCount(productReviews.size());

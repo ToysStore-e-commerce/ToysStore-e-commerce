@@ -1,5 +1,6 @@
 package store.toys.ecommerce.services;
 
+import store.toys.ecommerce.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import store.toys.ecommerce.dtos.cloudinary.CloudinaryDTO;
 import store.toys.ecommerce.dtos.product.ProductDTO;
 import store.toys.ecommerce.dtos.product.ProductMapper;
+import store.toys.ecommerce.exceptions.ProductNotFoundException;
 import store.toys.ecommerce.models.Category;
 import store.toys.ecommerce.models.Product;
 import store.toys.ecommerce.repositories.CategoryRepository;
@@ -24,16 +26,15 @@ import store.toys.ecommerce.util.FileUploadUtil;
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    @Autowired
-    private CloudinaryService cloudinaryService;
+    private final CloudinaryService cloudinaryService;
 
     public List<Product> getAllProducts(){
         return productRepository.findAll();
     }
     public Product getProductById(Long id){
         return productRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Product " + id + " not found")); }
-
+            .orElseThrow(() -> new EntityNotFoundException(Product.class.getSimpleName(), id));
+    }
     public List<Product> getFilteredProducts(String name, Long categoryId, Boolean featured, BigDecimal minPrice, BigDecimal maxPrice) {
         return productRepository.findAll((productRoot, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -61,7 +62,7 @@ public class ProductService {
     @Transactional
     public Product createProduct(ProductDTO productDTO) {
         Category productsCategory = categoryRepository.findById(productDTO.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category " + productDTO.getCategoryId() + " not found"));
+                .orElseThrow(()-> new EntityNotFoundException(Category.class.getSimpleName(), productDTO.getCategoryId()));
         Product newProduct = ProductMapper.toEntity(productDTO, productsCategory);
         return productRepository.save(newProduct);
     }
@@ -70,7 +71,7 @@ public class ProductService {
     public Product updateProduct(Long id, ProductDTO productDTO) {
         Product product = getProductById(id);
         Category category = categoryRepository.findById(productDTO.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category " + productDTO.getCategoryId() + " not found"));
+                .orElseThrow(()-> new EntityNotFoundException(Category.class.getSimpleName(), productDTO.getCategoryId()));
         product.setName(productDTO.getName());
         product.setPrice(productDTO.getPrice());
         product.setImageUrl(productDTO.getImageUrl());
@@ -82,7 +83,7 @@ public class ProductService {
     @Transactional
     public void uploadImage(final Long id, final MultipartFile file) {
         final Product product = this.productRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Product not found"));
+                .orElseThrow(()-> new ProductNotFoundException("Product not found"));
         FileUploadUtil.assertAllowed(file, FileUploadUtil.IMAGE_PATTERN);
         final String fileName = FileUploadUtil.getFileName(file.getOriginalFilename());
         final CloudinaryDTO responseDTO = this.cloudinaryService.uploadFile(file, fileName);
@@ -93,7 +94,7 @@ public class ProductService {
 
     public void deleteProduct(Long id) {
         if(!productRepository.existsById(id)) {
-            throw new RuntimeException("Product with " + id + " not found");
+            throw new EntityNotFoundException(Product.class.getSimpleName(), id);
         }
         productRepository.deleteById(id);
     }

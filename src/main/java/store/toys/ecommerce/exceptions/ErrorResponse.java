@@ -1,9 +1,13 @@
 package store.toys.ecommerce.exceptions;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 public class ErrorResponse {
 
     String message;
@@ -15,20 +19,5 @@ public class ErrorResponse {
         this.timestamp = LocalDateTime.now();
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
 }
 

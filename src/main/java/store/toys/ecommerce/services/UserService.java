@@ -1,6 +1,6 @@
 package store.toys.ecommerce.services;
 
-import jakarta.persistence.EntityNotFoundException;
+import store.toys.ecommerce.exceptions.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,6 +8,7 @@ import store.toys.ecommerce.dtos.user.UserMapper;
 import store.toys.ecommerce.dtos.user.UserRequestDTO;
 import store.toys.ecommerce.dtos.user.UserResponseDTO;
 //import store.toys.ecommerce.exceptions.EntityNotFoundException;
+import store.toys.ecommerce.models.Category;
 import store.toys.ecommerce.models.User;
 import store.toys.ecommerce.repositories.UserRepository;
 
@@ -30,7 +31,7 @@ public class UserService {
     @Transactional
     public UserResponseDTO getUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException(User.class.getSimpleName(), id));
         user.getReviews().isEmpty();
         return userMapper.toResponse(user);
     }
@@ -43,7 +44,7 @@ public class UserService {
 
     public UserResponseDTO updateUser(Long id, UserRequestDTO dto) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new EntityNotFoundException(User.class.getSimpleName(), id));
 
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
@@ -54,7 +55,7 @@ public class UserService {
 
     public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
-            throw new EntityNotFoundException("User not found with id: " + id);
+            throw new EntityNotFoundException(User.class.getSimpleName(), id);
         }
         userRepository.deleteById(id);
     }

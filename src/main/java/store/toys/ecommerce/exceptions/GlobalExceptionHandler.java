@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
@@ -14,18 +13,29 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-/*@ExceptionHandler(ProductNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handle ProductNotFoundException (ProductNotFoundException exception) {
-        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
-        return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
-    }*/
-
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException exception) {
         ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ProductNotInCartException.class)
+    public ResponseEntity<ErrorResponse> handleProductNotInCartException(ProductNotInCartException exception){
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CartForUserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCartForUserNotFoundException(CartForUserNotFoundException exception){
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleProductNotFoundException(ProductNotFoundException exception){
+        ErrorResponse errorResponse = new ErrorResponse(exception.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException exception) {

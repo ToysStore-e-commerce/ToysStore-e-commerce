@@ -3,10 +3,10 @@ package store.toys.ecommerce.services;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import store.toys.ecommerce.models.Cart;
-import store.toys.ecommerce.models.CartItem;
-import store.toys.ecommerce.models.Product;
-import store.toys.ecommerce.models.User;
+import store.toys.ecommerce.exceptions.CartForUserNotFoundException;
+import store.toys.ecommerce.exceptions.EntityNotFoundException;
+import store.toys.ecommerce.exceptions.ProductNotInCartException;
+import store.toys.ecommerce.models.*;
 import store.toys.ecommerce.repositories.CartItemRepository;
 import store.toys.ecommerce.repositories.CartRepository;
 import store.toys.ecommerce.repositories.ProductRepository;
@@ -26,9 +26,9 @@ public class CartService {
     @Transactional
     public Cart addProductToCart(Long userId, Long productId){
         User user = userRepository.findById(userId)
-                .orElseThrow(()->new RuntimeException("User with id: " + userId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException(User.class.getSimpleName(), userId));
         Product product = productRepository.findById(productId)
-                .orElseThrow(()->new RuntimeException("Product with id: " + productId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException(Product.class.getSimpleName(), productId));
         Cart cart = cartRepository.findByUser(user)
                 .orElseGet(()->{
                    Cart newCart = Cart.builder()
@@ -63,13 +63,13 @@ public class CartService {
     @Transactional
     public void removeProductFromCart(Long userId, Long productId){
         User user = userRepository.findById(userId)
-                .orElseThrow(()->new RuntimeException("User with id: " + userId + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException(User.class.getSimpleName(), userId));
         Cart cart = cartRepository.findByUser(user)
-                .orElseThrow(()->new RuntimeException("Cart for user with id: " + userId + " not found"));
+                .orElseThrow(()->new CartForUserNotFoundException(userId));
         CartItem cartItemToRemove = cart.getItems().stream()
                 .filter(item->item.getProduct().getId().equals(productId))
                 .findFirst()
-                .orElseThrow(()->new RuntimeException("Product is not in the cart"));
+                .orElseThrow(()->new ProductNotInCartException(productId));
         cart.getItems().remove(cartItemToRemove);
 
         BigDecimal totalPrice = cart.getItems().stream()
