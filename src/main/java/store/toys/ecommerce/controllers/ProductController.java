@@ -73,11 +73,31 @@ public class ProductController {
             @RequestBody @Valid ProductRequestDTO dto) {
         return new ResponseEntity<>(productService.createProduct(dto), HttpStatus.CREATED);
     }
+    @Operation(
+            summary = "Upload product image",
+            description = "Uploads an image for the product identified by the given ID. The image will be saved via Cloudinary."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Image uploaded successfully"),
+            @ApiResponse(responseCode = "404", description = "Product not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid file format or error")
+    })
     @PostMapping("/image/{id}")
     public ResponseEntity<?> uploadImage(@PathVariable final Long id, @RequestParam final MultipartFile file) {
         this.productService.uploadImage(id, file);
         return ResponseEntity.ok("File upload successfully");
     }
+
+    @Operation(
+            summary = "Update an existing product",
+            description = "Updates the product's details including name, price, category, and image URL."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product updated successfully",
+                    content = @Content(schema = @Schema(implementation = ProductResponseDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Product not found"),
+            @ApiResponse(responseCode = "400", description = "Invalid input")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> updateProduct(
             @PathVariable Long id,
