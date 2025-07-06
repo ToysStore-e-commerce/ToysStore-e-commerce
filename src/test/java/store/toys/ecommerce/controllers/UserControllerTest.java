@@ -30,7 +30,7 @@ class UserControllerTest {
     private UserService userService;
 
     @InjectMocks
-    private UserController userController;   // ваш реальный контроллер
+    private UserController userController;
 
     @BeforeEach
     void setUp() {
