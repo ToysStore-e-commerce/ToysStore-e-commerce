@@ -12,10 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import store.toys.ecommerce.dtos.category.CategoryDTO;
 import store.toys.ecommerce.dtos.category.CategoryMapper;
-import store.toys.ecommerce.dtos.product.ProductDTO;
-import store.toys.ecommerce.dtos.product.ProductMapper;
 import store.toys.ecommerce.models.Category;
-import store.toys.ecommerce.models.Product;
 import store.toys.ecommerce.services.CategoryService;
 
 import jakarta.validation.Valid;

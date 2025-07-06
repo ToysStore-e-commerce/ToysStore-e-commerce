@@ -3,7 +3,6 @@ package store.toys.ecommerce.services;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import store.toys.ecommerce.dtos.product.ProductDTO;
 import store.toys.ecommerce.dtos.product.ProductMapper;
 import store.toys.ecommerce.models.Category;
 import store.toys.ecommerce.models.Product;
@@ -23,7 +22,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final ProductMapper productMapper; // 💡 Inject the mapper
+    private final ProductMapper productMapper;
 
     public List<ProductResponseDTO> getAllProducts() {
         return productRepository.findAll().stream()

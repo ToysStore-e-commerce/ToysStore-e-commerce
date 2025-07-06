@@ -11,17 +11,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import store.toys.ecommerce.dtos.category.CategoryMapper;
-import store.toys.ecommerce.dtos.product.ProductDTO;
 import store.toys.ecommerce.dtos.product.ProductMapper;
 import store.toys.ecommerce.dtos.product.ProductRequestDTO;
 import store.toys.ecommerce.dtos.product.ProductResponseDTO;
-import store.toys.ecommerce.models.Product;
 import store.toys.ecommerce.services.ProductService;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/products")
