@@ -46,7 +46,7 @@ cd toys-ecommerce
 
 \### 2. Configure MySQL
 
-Create a local database (e.g. `toys_db`) and update credentials in:
+Create a local database (e.g. `Toys_Store`) and update credentials in:
 
 ```properties
 src/main/resources/application.properties
