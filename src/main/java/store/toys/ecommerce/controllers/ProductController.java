@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import store.toys.ecommerce.dtos.category.CategoryMapper;
 import store.toys.ecommerce.dtos.product.ProductDTO;
 import store.toys.ecommerce.dtos.product.ProductMapper;
+import store.toys.ecommerce.dtos.product.ProductRequestDTO;
+import store.toys.ecommerce.dtos.product.ProductResponseDTO;
 import store.toys.ecommerce.models.Product;
 import store.toys.ecommerce.services.ProductService;
 
@@ -27,51 +29,75 @@ import java.util.stream.Collectors;
 public class ProductController {
 
     private final ProductService productService;
+    private final ProductMapper productMapper;
 
-    @Operation(summary = "Filter products by name, category, featured flag and price range,")
+    @Operation(
+            summary = "Get all products",
+            description = "Returns a list of all available products with basic details including category, price, and rating."
+    )
+    @GetMapping
+    public List<ProductResponseDTO> getAllProducts() {
+        return productService.getAllProducts();
+    }
+
+    @Operation(summary = "Filter products by name, category, featured flag and price range")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Filtered product list",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class))))
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ProductResponseDTO.class))))
     })
-
-    @GetMapping ("/api/products/filter")
-    public ResponseEntity<List<ProductDTO>> getAllProducts(
+    @GetMapping("/filter")
+    public ResponseEntity<List<ProductResponseDTO>> filterProducts(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) Boolean featured,
             @RequestParam(required = false) BigDecimal minPrice,
             @RequestParam(required = false) BigDecimal maxPrice
     ) {
-        List<Product> filtered = productService.getFilteredProducts(name, categoryId, featured, minPrice, maxPrice);
-        List<ProductDTO> dtos = filtered.stream()
-                .map(ProductMapper::toDTO)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+        return ResponseEntity.ok(
+                productService.getFilteredProducts(name, categoryId, featured, minPrice, maxPrice)
+        );
     }
 
+    @Operation(
+            summary = "Get product by ID",
+            description = "Returns a single product’s details by its ID. Throws 404 if not found."
+    )
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) {
-        Product product = productService.getProductById(id);
-        return ResponseEntity.ok(ProductMapper.toDTO(product));
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.getProductById(id));
     }
 
+    @Operation(
+            summary = "Create a new product",
+            description = "Creates a new product with name, price, image URL, category, and featured flag. Automatically initializes rating and review count."
+    )
     @PostMapping
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody @Valid ProductDTO productDTO) {
-        Product product = productService.createProduct(productDTO);
-        return new ResponseEntity<>(ProductMapper.toDTO(product), HttpStatus.CREATED);
+    public ResponseEntity<ProductResponseDTO> createProduct(
+            @RequestBody @Valid ProductRequestDTO dto) {
+        return new ResponseEntity<>(productService.createProduct(dto), HttpStatus.CREATED);
     }
 
+    @Operation(
+            summary = "Update product by ID",
+            description = "Updates the specified product’s details. You must provide all required fields."
+    )
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long id, @RequestBody @Valid ProductDTO productDTO) {
-        Product updatedProduct = productService.updateProduct(id, productDTO);
-        return ResponseEntity.ok(ProductMapper.toDTO(updatedProduct));
+    public ResponseEntity<ProductResponseDTO> updateProduct(
+            @PathVariable Long id,
+            @RequestBody @Valid ProductRequestDTO dto) {
+        return ResponseEntity.ok(productService.updateProduct(id, dto));
     }
 
+    @Operation(
+            summary = "Delete product by ID",
+            description = "Deletes the specified product from the system. Returns 204 if successful or 404 if not found."
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
 }
+
 
 

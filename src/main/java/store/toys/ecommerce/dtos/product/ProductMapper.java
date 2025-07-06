@@ -6,29 +6,35 @@ import store.toys.ecommerce.models.Product;
 
 @Component
 public class ProductMapper {
-    public static Product toEntity(ProductDTO dto, Category category){
-        if (dto == null) {
-            return null;
-        }
+
+    public Product toEntity(ProductRequestDTO dto, Category category) {
+        if (dto == null) return null;
+
         return Product.builder()
                 .name(dto.getName())
                 .price(dto.getPrice())
                 .imageUrl(dto.getImageUrl())
                 .featured(dto.isFeatured())
                 .category(category)
-                // review/rating default values?
+                .rating(0.0)
+                .reviewCount(0)
                 .build();
     }
-    public static ProductDTO toDTO(Product product){
-        if (product == null) {
-            return null;
-        }
-        return ProductDTO.builder()
+
+    public ProductResponseDTO toDTO(Product product) {
+        if (product == null) return null;
+
+        return ProductResponseDTO.builder()
+                .id(product.getId())
                 .name(product.getName())
                 .price(product.getPrice())
                 .imageUrl(product.getImageUrl())
                 .featured(product.isFeatured())
+                .rating(product.getRating())
+                .reviewCount(product.getReviewCount())
                 .categoryId(product.getCategory().getId())
+                .categoryName(product.getCategory().getName())
                 .build();
     }
 }
+
