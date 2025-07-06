@@ -1,9 +1,17 @@
 package store.toys.ecommerce;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
+@OpenAPIDefinition(
+		info = @Info(
+				title = "Toys_Store E-Commerce API",
+				version = "1.0",
+				description = "Backend for an E-Commerce platform built with Spring Boot"
+		)
+)
 @SpringBootApplication
 public class EcommerceApplication {
 

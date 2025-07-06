@@ -1,5 +1,6 @@
 package store.toys.ecommerce.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,11 +20,13 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+    @Operation(summary = "Get all users", description = "Returns all users without exposing passwords")
     @GetMapping
     public List<UserResponseDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 
+    @Operation(summary = "Get user by ID", description = "Returns a user without exposing password")
     @GetMapping("/{id}")
     public UserResponseDTO getUserById(@PathVariable Long id) {
         return userService.getUserById(id);

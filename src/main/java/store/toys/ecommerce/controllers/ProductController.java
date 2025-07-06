@@ -1,5 +1,11 @@
 package store.toys.ecommerce.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,7 +28,13 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping
+    @Operation(summary = "Filter products by name, category, featured flag and price range,")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Filtered product list",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = Product.class))))
+    })
+
+    @GetMapping ("/api/products/filter")
     public ResponseEntity<List<ProductDTO>> getAllProducts(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Long categoryId,
