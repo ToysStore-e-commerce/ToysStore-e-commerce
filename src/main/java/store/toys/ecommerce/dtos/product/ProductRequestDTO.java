@@ -9,13 +9,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-<<<<<<< HEAD:src/main/java/store/toys/ecommerce/dtos/product/ProductDTO.java
-public class ProductDTO {
-    private Long id;
-
-=======
 public class ProductRequestDTO {
->>>>>>> TOYS-41-configure-swagger:src/main/java/store/toys/ecommerce/dtos/product/ProductRequestDTO.java
     @NotBlank(message = "Product name is required")
     @Size(max = 70)
     private String name;

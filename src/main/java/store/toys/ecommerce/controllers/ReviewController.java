@@ -31,7 +31,7 @@ public class ReviewController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "List of reviews returned",
-                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ReviewDTO.class)))),
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ReviewRequestDTO.class)))),
             @ApiResponse(responseCode = "400", description = "Missing filter parameter", content = @Content)
     })
 
@@ -63,7 +63,7 @@ public class ReviewController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Review created successfully",
-                    content = @Content(schema = @Schema(implementation = ReviewDTO.class))),
+                    content = @Content(schema = @Schema(implementation = ReviewRequestDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content)
     })
 

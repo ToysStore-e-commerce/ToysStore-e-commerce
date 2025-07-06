@@ -6,14 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import store.toys.ecommerce.dtos.cloudinary.CloudinaryDTO;
-import store.toys.ecommerce.dtos.product.ProductDTO;
+import store.toys.ecommerce.dtos.product.ProductRequestDTO;
 import store.toys.ecommerce.dtos.product.ProductMapper;
 import store.toys.ecommerce.exceptions.ProductNotFoundException;
 import store.toys.ecommerce.models.Category;
 import store.toys.ecommerce.models.Product;
 import store.toys.ecommerce.repositories.CategoryRepository;
 import store.toys.ecommerce.repositories.ProductRepository;
-import store.toys.ecommerce.dtos.product.ProductRequestDTO;
 import store.toys.ecommerce.dtos.product.ProductResponseDTO;
 
 import java.math.BigDecimal;
@@ -29,17 +28,17 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
+    private final CloudinaryService cloudinaryService;
 
     public List<ProductResponseDTO> getAllProducts() {
         return productRepository.findAll().stream()
                 .map(productMapper::toDTO)
                 .toList();
     }
-    private final CloudinaryService cloudinaryService;
 
     public ProductResponseDTO getProductById(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product " + id + " not found"));
+                .orElseThrow(() -> new EntityNotFoundException(Product.class.getSimpleName(), id));
         return productMapper.toDTO(product);
     }
 
@@ -72,7 +71,7 @@ public class ProductService {
     @Transactional
     public ProductResponseDTO createProduct(ProductRequestDTO dto) {
         Category category = categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category " + dto.getCategoryId() + " not found"));
+                .orElseThrow(()-> new EntityNotFoundException(Category.class.getSimpleName(), dto.getCategoryId()));
         Product newProduct = productMapper.toEntity(dto, category);
         return productMapper.toDTO(productRepository.save(newProduct));
     }
@@ -80,7 +79,7 @@ public class ProductService {
     @Transactional
     public ProductResponseDTO updateProduct(Long id, ProductRequestDTO dto) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product " + id + " not found"));
+                .orElseThrow(()-> new EntityNotFoundException(Product.class.getSimpleName(), id));
 
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(()-> new EntityNotFoundException(Category.class.getSimpleName(), dto.getCategoryId()));

@@ -11,14 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-<<<<<<< HEAD
 import org.springframework.web.multipart.MultipartFile;
-import store.toys.ecommerce.dtos.category.CategoryMapper;
-import store.toys.ecommerce.dtos.product.ProductDTO;
-=======
->>>>>>> TOYS-41-configure-swagger
-import store.toys.ecommerce.dtos.product.ProductMapper;
 import store.toys.ecommerce.dtos.product.ProductRequestDTO;
+import store.toys.ecommerce.dtos.product.ProductMapper;
 import store.toys.ecommerce.dtos.product.ProductResponseDTO;
 import store.toys.ecommerce.services.ProductService;
 
@@ -78,27 +73,17 @@ public class ProductController {
             @RequestBody @Valid ProductRequestDTO dto) {
         return new ResponseEntity<>(productService.createProduct(dto), HttpStatus.CREATED);
     }
-
-<<<<<<< HEAD
     @PostMapping("/image/{id}")
     public ResponseEntity<?> uploadImage(@PathVariable final Long id, @RequestParam final MultipartFile file) {
         this.productService.uploadImage(id, file);
         return ResponseEntity.ok("File upload successfully");
     }
-
-=======
-    @Operation(
-            summary = "Update product by ID",
-            description = "Updates the specified product’s details. You must provide all required fields."
-    )
->>>>>>> TOYS-41-configure-swagger
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> updateProduct(
             @PathVariable Long id,
             @RequestBody @Valid ProductRequestDTO dto) {
         return ResponseEntity.ok(productService.updateProduct(id, dto));
     }
-
     @Operation(
             summary = "Delete product by ID",
             description = "Deletes the specified product from the system. Returns 204 if successful or 404 if not found."
