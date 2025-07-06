@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import store.toys.ecommerce.dtos.product.ProductResponseDTO;
 import store.toys.ecommerce.models.Category;
 import store.toys.ecommerce.models.Product;
 import store.toys.ecommerce.repositories.CategoryRepository;
@@ -53,12 +54,12 @@ public class ProductServiceTest {
         // Given
         given(productRepository.findById(1L)).willReturn(Optional.of(product));
         // When
-        Product result = productService.getProductById(1L);
+        ProductResponseDTO result = productService.getProductById(1L);
         // Then
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(1L);
         assertThat(result.getName()).isEqualTo("Pikachu Plush");
-        assertThat(result.getCategory().getName()).isEqualTo("Plusies");
+        assertThat(result.getCategoryName()).isEqualTo("Plusies");
 
         verify(productRepository, times(1)).findById(1L);
     }
