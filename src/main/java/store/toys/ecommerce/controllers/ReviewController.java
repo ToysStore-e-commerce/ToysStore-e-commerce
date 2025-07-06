@@ -1,5 +1,11 @@
 package store.toys.ecommerce.controllers;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +24,16 @@ import java.util.stream.Collectors;
 public class ReviewController {
 
     private final ReviewService reviewService;
+
+    @Operation(
+            summary = "Get reviews by product or user ID",
+            description = "Returns all reviews filtered by productId or userId. One filter is required."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of reviews returned",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = ReviewDTO.class)))),
+            @ApiResponse(responseCode = "400", description = "Missing filter parameter", content = @Content)
+    })
 
     @GetMapping
     public ResponseEntity<List<ReviewRequestDTO>> getReviews(
@@ -40,6 +56,16 @@ public class ReviewController {
 
         return ResponseEntity.ok(result);
     }
+
+    @Operation(
+            summary = "Create a review",
+            description = "Submits a new review for a product by a user. Requires valid rating, body, productId and userId."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Review created successfully",
+                    content = @Content(schema = @Schema(implementation = ReviewDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input", content = @Content)
+    })
 
     @PostMapping
     public ResponseEntity<ReviewRequestDTO> createReview(@RequestBody @Valid ReviewRequestDTO dto) {
