@@ -78,6 +78,47 @@ spring.datasource.password=your_password
 | PUT    | `/products/{id}` | Update product    |
 | DELETE | `/products/{id}` | Delete product    |
 
+Get all products:
+
+**Success 200**  
+```json
+[
+  {
+    "id": 1,
+    "name": "Pikachu Plush",
+    "price": 19.95,
+    "featured": true,
+    "categoryName": "Plushies",
+    "rating": 4.9
+  },
+  ...
+]
+
+Create a product:
+
+POST {{baseUrl}}/api/products
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+
+{
+  "name": "Master Ball Replica",
+  "price": 149.99,
+  "featured": true,
+  "categoryId": 2,
+  "imageUrl": "https://example.com/master-ball.jpg"
+}
+
+Success 201 – returns the created Product DTO.
+
+Validation error example:
+If a required field is missing the API returns 400 Bad Request:
+
+{
+  "name": "must not be blank",
+  "price": "must be greater than 0"
+}
+
 Supports filters:
 
 ```
@@ -134,5 +175,5 @@ http://localhost:8080/swagger-ui/index.html
 
 ## 📬 Contact
 
-Made with ❤️ by FemCoders team 4
+Made with ❤️ by FemCoders Team 4
 
