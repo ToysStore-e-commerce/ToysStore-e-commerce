@@ -53,7 +53,7 @@ src/main/resources/application.properties
 ```
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/toys_db
+spring.datasource.url=jdbc:mysql://localhost:3306/toys_store
 spring.datasource.username=your_username
 spring.datasource.password=your_password
 ```
@@ -78,9 +78,12 @@ spring.datasource.password=your_password
 | PUT    | `/products/{id}` | Update product    |
 | DELETE | `/products/{id}` | Delete product    |
 
-Get all products:
 
-**Success 200**  
+## 🔎 Get all products
+
+`GET localhost:8080/api/products`
+
+
 ```json
 [
   {
@@ -91,38 +94,26 @@ Get all products:
     "categoryName": "Plushies",
     "rating": 4.9
   },
-  ...
+  ```
 ]
 
-Create a product:
-
-POST {{baseUrl}}/api/products
-Authorization: Bearer {{adminToken}}
-Content-Type: application/json
-
-
-{
-  "name": "Master Ball Replica",
-  "price": 149.99,
-  "featured": true,
-  "categoryId": 2,
-  "imageUrl": "https://example.com/master-ball.jpg"
-}
-
-Success 201 – returns the created Product DTO.
-
-Validation error example:
-If a required field is missing the API returns 400 Bad Request:
+<summary>Success 201 — Product DTO</summary>
+  
+### Validation error example:
+### If a required field is missing the API returns 400 Bad Request:
 
 {
   "name": "must not be blank",
   "price": "must be greater than 0"
 }
 
-Supports filters:
+### Supports filters:
 
 ```
 /products?name=pikachu&categoryId=1&featured=true
+/products?minPrice=1000&maxPrice=2000
+/products?name=ball
+
 ```
 
 ### 🔹 Users
