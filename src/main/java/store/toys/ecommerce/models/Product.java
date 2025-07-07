@@ -18,13 +18,14 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 70)
     private String name;
 
     @Column(nullable = false)
     private BigDecimal price;
 
     private String imageUrl;
+    private String cloudinaryImageId;
 
     private boolean featured;
 

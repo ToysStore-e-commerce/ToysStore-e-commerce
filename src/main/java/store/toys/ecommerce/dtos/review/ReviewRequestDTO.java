@@ -5,7 +5,7 @@ import lombok.*;
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Builder
-public class ReviewDTO {
+public class ReviewRequestDTO {
 
     @Min(value = 0)
     @Max(value = 5)
