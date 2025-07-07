@@ -53,7 +53,7 @@ src/main/resources/application.properties
 ```
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/toys_db
+spring.datasource.url=jdbc:mysql://localhost:3306/toys_store
 spring.datasource.username=your_username
 spring.datasource.password=your_password
 ```
@@ -78,10 +78,42 @@ spring.datasource.password=your_password
 | PUT    | `/products/{id}` | Update product    |
 | DELETE | `/products/{id}` | Delete product    |
 
-Supports filters:
+
+## 🔎 Get all products
+
+`GET localhost:8080/api/products`
+
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Pikachu Plush",
+    "price": 19.95,
+    "featured": true,
+    "categoryName": "Plushies",
+    "rating": 4.9
+  },
+  ```
+]
+
+<summary>Success 201 — Product DTO</summary>
+  
+### Validation error example:
+### If a required field is missing the API returns 400 Bad Request:
+
+{
+  "name": "must not be blank",
+  "price": "must be greater than 0"
+}
+
+### Supports filters:
 
 ```
 /products?name=pikachu&categoryId=1&featured=true
+/products?minPrice=1000&maxPrice=2000
+/products?name=ball
+
 ```
 
 ### 🔹 Users
@@ -134,5 +166,5 @@ http://localhost:8080/swagger-ui/index.html
 
 ## 📬 Contact
 
-Made with ❤️ by FemCoders team 4
+Made with ❤️ by FemCoders Team 4
 

@@ -11,6 +11,7 @@ public class ProductResponseDTO {
     private String name;
     private BigDecimal price;
     private String imageUrl;
+    private String cloudinaryImageId;
     private boolean featured;
     private double rating;
     private int reviewCount;

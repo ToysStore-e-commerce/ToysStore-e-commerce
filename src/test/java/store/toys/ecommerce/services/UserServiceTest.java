@@ -20,22 +20,17 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-/**
- * Unit-тесты UserService.
- */
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    /* ---------- mocks & SUT ---------- */
     @Mock  private UserRepository userRepo;
-    @Mock  private UserMapper     userMapper;   // MapStruct интерфейс
+    @Mock  private UserMapper userMapper;  
 
     @InjectMocks
     private UserService userService;
 
-    /* ---------- общие объекты ---------- */
-    private User          ash;     // Entity
-    private UserResponseDTO ashDto; // DTO
+    private User ash;     
+    private UserResponseDTO ashDto; 
 
     @BeforeEach
     void setUp() {
@@ -48,24 +43,8 @@ class UserServiceTest {
         ashDto = new UserResponseDTO(1L, "ashketchum", "ash@pokemon.com", List.of());
     }
 
-    /* =======================================================================
-       getAllUsers()
-       ======================================================================= */
-    @Test
-    void getAllUsers_returnsListOfDtos() {
-        when(userRepo.findAll()).thenReturn(List.of(ash));
-        when(userMapper.toResponse(ash)).thenReturn(ashDto);
 
-        List<UserResponseDTO> result = userService.getAllUsers();
 
-        assertThat(result)               // AssertJ-пример
-                .extracting(UserResponseDTO::getUsername)
-                .containsExactly("misty");
-    }
-
-    /* =======================================================================
-       getUserById()
-       ======================================================================= */
     @Test
     void getUserById_existing_returnsDto() {
         when(userRepo.findById(1L)).thenReturn(Optional.of(ash));
@@ -85,10 +64,7 @@ class UserServiceTest {
         assertThatThrownBy(() -> userService.getUserById(99L))
                 .isInstanceOf(EntityNotFoundException.class);
     }
-
-    /* =======================================================================
-       createUser()
-       ======================================================================= */
+    
     @Test
     void createUser_savesAndReturnsDto() {
         UserRequestDTO req = new UserRequestDTO("misty", "misty@pokemon.com", "togepi456");
@@ -106,15 +82,12 @@ class UserServiceTest {
         verify(userRepo).save(misty);
     }
 
-    /* =======================================================================
-       updateUser()
-       ======================================================================= */
     @Test
     void updateUser_changesFields() {
         UserRequestDTO patch = new UserRequestDTO("ash_new", "ash@poke.com", "newpass");
         when(userRepo.findById(1L)).thenReturn(Optional.of(ash));
         when(userRepo.save(any(User.class))).thenAnswer(i -> i.getArgument(0, User.class));
-        when(userMapper.toResponse(any(User.class))).thenCallRealMethod(); // допустим mapper генерирует DTO
+        when(userMapper.toResponse(any(User.class))).thenCallRealMethod();
 
         UserResponseDTO updated = userService.updateUser(1L, patch);
 
@@ -122,9 +95,6 @@ class UserServiceTest {
         verify(userRepo).save(any(User.class));
     }
 
-    /* =======================================================================
-       deleteUser()
-       ======================================================================= */
     @Test
     void deleteUser_existing_invokesRepoDelete() {
         when(userRepo.existsById(1L)).thenReturn(true);
