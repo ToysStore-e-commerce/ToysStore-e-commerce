@@ -39,7 +39,6 @@ class UserControllerTest {
         mapper = new ObjectMapper();
     }
 
-
     @Test
     void getAllUsers_returnsList() throws Exception {
         UserResponseDTO ash   = UserResponseDTO.builder()
@@ -61,7 +60,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$[1].email").value("misty@pokemon.com"));
     }
 
-
     @Test
     void getUserById_returnsUser() throws Exception {
         UserResponseDTO ash = UserResponseDTO.builder()
@@ -76,7 +74,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.username").value("ash"))
                 .andExpect(jsonPath("$.id").value(1));
     }
-
 
     @Test
     void createUser_returnsCreated() throws Exception {
@@ -97,7 +94,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.username").value("misty"));
     }
 
-
     @Test
     void updateUser_returnsUpdated() throws Exception {
         UserRequestDTO updateReq = new UserRequestDTO("ash_new", "ash_new@pokemon.com", "pikachu007");
@@ -117,7 +113,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.username").value("ash_new"))
                 .andExpect(jsonPath("$.email").value("ash_new@pokemon.com"));
     }
-
 
     @Test
     void deleteUser_returnsNoContent() throws Exception {
