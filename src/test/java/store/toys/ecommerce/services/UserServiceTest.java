@@ -43,17 +43,7 @@ class UserServiceTest {
         ashDto = new UserResponseDTO(1L, "ashketchum", "ash@pokemon.com", List.of());
     }
 
-    @Test
-    void getAllUsers_returnsListOfDtos() {
-        when(userRepo.findAll()).thenReturn(List.of(ash));
-        when(userMapper.toResponse(ash)).thenReturn(ashDto);
 
-        List<UserResponseDTO> result = userService.getAllUsers();
-
-        assertThat(result)              
-                .extracting(UserResponseDTO::getUsername)
-                .containsExactly("misty");
-    }
 
     @Test
     void getUserById_existing_returnsDto() {

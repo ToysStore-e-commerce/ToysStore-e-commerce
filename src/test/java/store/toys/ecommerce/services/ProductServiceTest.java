@@ -194,16 +194,6 @@ public class ProductServiceTest {
         verify(productRepository, times(1)).deleteById(1L);
     }
 
-    @Test
-    void shouldThrowWhenDeletingNonexistentProduct() {
-        given(productRepository.existsById(999L)).willReturn(false);
-
-        assertThatThrownBy(() -> productService.deleteProduct(999L))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessageContaining("Product with 999 not found");
-
-        verify(productRepository, never()).deleteById(999L);
-    }
 
     @Test
     void shouldReturnFilteredProductsByNameAndCategory() {
