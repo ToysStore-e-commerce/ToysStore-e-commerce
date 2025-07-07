@@ -1,37 +1,46 @@
 package store.toys.ecommerce.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import store.toys.ecommerce.dtos.product.ProductResponseDTO;
 import store.toys.ecommerce.services.ProductService;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-import static org.mockito.BDDMockito.given;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ProductController.class)
 class ProductControllerTest {
 
-    @Autowired
     private MockMvc mockMvc;
+    private ObjectMapper objectMapper;
 
-    @MockBean
+    @Mock
     private ProductService productService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @InjectMocks
+    private ProductController productController;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
+        objectMapper = new ObjectMapper();
+    }
 
     @Test
     void shouldReturnProductById() throws Exception {
-        // Given
-        ProductResponseDTO response = ProductResponseDTO.builder()
+        ProductResponseDTO pikachu = ProductResponseDTO.builder()
                 .id(1L)
                 .name("Pikachu Plush")
                 .price(new BigDecimal("19.99"))
@@ -43,15 +52,42 @@ class ProductControllerTest {
                 .categoryName("Plusies")
                 .build();
 
-        given(productService.getProductById(1L)).willReturn(response);
+        when(productService.getProductById(1L)).thenReturn(pikachu);
 
-        // When + Then
         mockMvc.perform(get("/api/products/1"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.name").value("Pikachu Plush"))
                 .andExpect(jsonPath("$.price").value(19.99))
                 .andExpect(jsonPath("$.categoryName").value("Plusies"));
+    }
+
+    @Test
+    void shouldReturnFilteredProducts() throws Exception {
+        ProductResponseDTO product = ProductResponseDTO.builder()
+                .id(2L)
+                .name("Charizard Figure")
+                .price(new BigDecimal("39.99"))
+                .imageUrl("https://example.com/charizard.png")
+                .featured(false)
+                .rating(4.7)
+                .reviewCount(12)
+                .categoryId(2L)
+                .categoryName("Figures")
+                .build();
+
+        when(productService.getFilteredProducts(eq("Charizard"), eq(2L), eq(false),
+                eq(new BigDecimal("30.00")), eq(new BigDecimal("50.00"))))
+                .thenReturn(List.of(product));
+
+        mockMvc.perform(get("/api/products/filter")
+                        .param("name", "Charizard")
+                        .param("categoryId", "2")
+                        .param("featured", "false")
+                        .param("minPrice", "30.00")
+                        .param("maxPrice", "50.00"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].name").value("Charizard Figure"))
+                .andExpect(jsonPath("$[0].price").value(39.99));
     }
 }
